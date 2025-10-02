@@ -1,0 +1,17 @@
+vm_name             = "chaihtu-vm"
+location            = "East US"
+resource_group_name = "my-rg"
+vm_size             = "Standard_B1s"
+# admin_username      = "azureuser"
+# ssh_public_key      = "ssh-rsa AAAAB3Nz...."
+# network_interface_id = "/subscriptions/xxxx/resourceGroups/my-rg/providers/Microsoft.Network/networkInterfaces/my-nic"
+
+# image_publisher = "Canonical"
+# image_offer     = "UbuntuServer"
+# image_sku       = "20_04-lts-gen2"
+# image_version   = "latest"
+
+admin_password = "Mahindra@321"
+mf1_password   = "Mahindra@321"
+mf2_password   = "Mahindra@321"
+custom_image_id = "/subscriptions/adc91d15-9dcb-4da8-a467-af86503b5de9/resourceGroups/hardened-images/providers/Microsoft.Compute/images/mmfsl-ubuntu-hardened-22.4-image"
