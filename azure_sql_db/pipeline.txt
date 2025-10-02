@@ -1,0 +1,64 @@
+trigger:
+- mai
+ 
+pool:
+  name: 'Default'  # self-hosted agent pool name
+
+stages:
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    steps:
+    # Install Terraform
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '1.7.5'
+
+    # Terraform Init (downloads providers + configures backend)
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'azurerm-automation'
+        backendAzureRmResourceGroupName: 'mmfsl-automation'
+        backendAzureRmStorageAccountName: 'terraformautomationnew'
+        backendAzureRmContainerName: 'tfstatenew'
+        backendAzureRmKey: 'vm.tfstate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/azure_sql_db'
+        terraformCLIPath: '/home/azureuser/azagent/_work/_tool/terraform/1.7.5/x64/terraform'
+
+    # - task: TerraformTaskV4@4
+    #   displayName: 'Terraform Destroy'
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'destroy'
+    #     environmentServiceNameAzureRM: 'azurerm-automation'
+    #     commandOptions: '-auto-approve'  # automatically confirm destruction
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/azure_sql_db'
+    #     terraformCLIPath: '/home/azureuser/azagent/_work/_tool/terraform/1.7.5/x64/terraform'
+
+
+    # Terraform Plan
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Plan'
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        environmentServiceNameAzureRM: 'azurerm-automation'
+        commandOptions: '-out=tfplan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/azure_sql_db'
+        terraformCLIPath: '/home/azureuser/azagent/_work/_tool/terraform/1.7.5/x64/terraform'
+    
+
+    # # Terraform Apply
+    # - task: TerraformTaskV4@4
+    #   displayName: 'Terraform Apply'
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'apply'
+    #     environmentServiceNameAzureRM: 'azurerm-automation'
+    #     commandOptions: '-input=true tfplan'  # Use the plan file created in previous step
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/azure_sql_db'
+    #     terraformCLIPath: '/home/azureuser/azagent/_work/_tool/terraform/1.7.5/x64/terraform'
+
